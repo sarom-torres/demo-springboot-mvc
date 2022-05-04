@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.curso.boot.dao.CargoDao;
 import com.curso.boot.domain.Cargo;
 
-@Service @Transactional(readOnly = false)
+@Service 
+@Transactional(readOnly = false)
 public class CargoServiceImpl implements CargoService{
 	
 	@Autowired
@@ -30,11 +31,13 @@ public class CargoServiceImpl implements CargoService{
 		dao.delete(id);		
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Cargo buscarPorId(Long id) {
 		return dao.findById(id);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<Cargo> buscarTodos() {
 		return dao.findAll();
