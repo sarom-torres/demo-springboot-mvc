@@ -1,5 +1,7 @@
 package com.curso.boot.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -8,12 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.curso.boot.DemoMvcApplication;
 import com.curso.boot.domain.Departamento;
 import com.curso.boot.service.DepartamentoService;
 
 @Controller
 @RequestMapping("/departamentos")
 public class DepartamentoController {
+	private static final Logger LOGGER= LoggerFactory.getLogger(DemoMvcApplication.class);
 	
 	@Autowired
 	private DepartamentoService service;
@@ -45,5 +49,14 @@ public class DepartamentoController {
 	public String editar(Departamento departamento) {
 		service.editar(departamento);
 		return "redirect:/departamentos/cadastrar";
+	}
+	
+	@GetMapping("/excluir/{id}")
+	public String excluir(@PathVariable("id") Long id, ModelMap model) {
+		LOGGER.info("método excluir");
+		if (!service.departamentoTemCargos(id)) {
+			service.excluir(id);
+		}
+		return listar(model);
 	}
 }
